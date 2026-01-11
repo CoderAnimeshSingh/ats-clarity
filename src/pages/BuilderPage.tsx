@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useResumeStore, createNewResume } from '@/store/resumeStore';
 import { getResume, saveResume } from '@/lib/db';
-import { analyzeResume, getScoreLabel } from '@/lib/atsEngine';
+import { analyzeResume } from '@/lib/atsEngine';
 import { PersonalInfoStep } from '@/components/builder/PersonalInfoStep';
 import { SummaryStep } from '@/components/builder/SummaryStep';
 import { SkillsStep } from '@/components/builder/SkillsStep';
@@ -23,6 +23,7 @@ import { ProjectsStep } from '@/components/builder/ProjectsStep';
 import { ResumePreview } from '@/components/builder/ResumePreview';
 import { ATSScoreCard } from '@/components/builder/ATSScoreCard';
 import { TemplateSelector } from '@/components/builder/TemplateSelector';
+import { ExportDialog } from '@/components/builder/ExportDialog';
 import { cn } from '@/lib/utils';
 
 const steps = [
@@ -40,6 +41,7 @@ export default function BuilderPage() {
   const { currentResume, setCurrentResume, currentStep, setCurrentStep, isDirty } = useResumeStore();
   const [showPreview, setShowPreview] = useState(true);
   const [showTemplates, setShowTemplates] = useState(false);
+  const [showExport, setShowExport] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   // Load resume
@@ -86,14 +88,8 @@ export default function BuilderPage() {
     }
   };
 
-  const handleExport = async () => {
-    // PDF export will be handled by preview component
-    const previewElement = document.getElementById('resume-preview-container');
-    if (previewElement) {
-      // Trigger download through PDF component
-      const event = new CustomEvent('exportPDF');
-      previewElement.dispatchEvent(event);
-    }
+  const handleExport = () => {
+    setShowExport(true);
   };
 
   if (!currentResume) {
@@ -274,6 +270,13 @@ export default function BuilderPage() {
         open={showTemplates} 
         onOpenChange={setShowTemplates}
         currentTemplate={currentResume.templateId}
+      />
+
+      {/* Export Dialog */}
+      <ExportDialog
+        open={showExport}
+        onOpenChange={setShowExport}
+        resume={currentResume}
       />
     </div>
   );
