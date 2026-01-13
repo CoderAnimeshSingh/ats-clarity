@@ -1,73 +1,229 @@
-# Welcome to your Lovable project
+# ResumeATS - Free ATS-Optimized Resume & Cover Letter Builder
 
-## Project info
+<div align="center">
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+![ResumeATS](https://img.shields.io/badge/ResumeATS-Resume%20Builder-6366f1?style=for-the-badge)
+![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat-square&logo=tailwindcss)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-## How can I edit this code?
+**Create professional, ATS-optimized resumes and cover letters in minutes.**  
+No signup required. 100% free. Your data stays on your device.
 
-There are several ways of editing your application.
+[Live Demo](https://resumeats.app) • [Report Bug](https://github.com/yourusername/resumeats/issues) • [Request Feature](https://github.com/yourusername/resumeats/issues)
 
-**Use Lovable**
+</div>
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## ✨ Features
 
-**Use your preferred IDE**
+### 🎯 ATS Optimization
+- **Real-time ATS Scoring** - Get instant feedback on how well your resume performs
+- **Smart Suggestions** - Actionable tips to improve your resume's visibility
+- **Keyword Optimization** - Ensure your skills and experience are highlighted
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 📄 Resume Builder
+- **Step-by-step Wizard** - Easy-to-follow process for creating professional resumes
+- **Live Preview** - See changes in real-time as you type
+- **Multiple Templates** - Choose from clean, ATS-friendly designs
+- **All Sections Included** - Personal info, summary, skills, experience, education, projects
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### ✉️ Cover Letter Builder
+- **4 Tone Options** - Professional, Confident, Friendly, or Formal
+- **Pre-built Templates** - Get started quickly with customizable templates
+- **Company Personalization** - Auto-fill company name and job title throughout
 
-Follow these steps:
+### 📥 Export & Storage
+- **PDF Export** - Download print-ready PDFs in A4 or US Letter format
+- **Offline Storage** - All data stored locally using IndexedDB
+- **No Account Required** - Start building immediately without signup
+- **Privacy First** - Your data never leaves your device
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Quick Start
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/resumeats.git
+
+# Navigate to project directory
+cd resumeats
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:8080](http://localhost:8080) to view the app.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🛠️ Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+| Technology | Purpose |
+|------------|---------|
+| **React 18** | UI Framework |
+| **TypeScript** | Type Safety |
+| **Vite** | Build Tool |
+| **Tailwind CSS** | Styling |
+| **shadcn/ui** | UI Components |
+| **Zustand** | State Management |
+| **Dexie (IndexedDB)** | Local Storage |
+| **@react-pdf/renderer** | PDF Generation |
+| **Framer Motion** | Animations |
+| **React Hook Form + Zod** | Form Handling |
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 📁 Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+src/
+├── components/
+│   ├── builder/          # Resume builder components
+│   ├── cover-letter/     # Cover letter components
+│   ├── ui/               # Reusable UI components (shadcn)
+│   └── upgrade/          # Upgrade modal (unused - all features free)
+├── hooks/                # Custom React hooks
+├── lib/
+│   ├── atsEngine.ts      # ATS scoring engine
+│   ├── db.ts             # IndexedDB operations
+│   ├── templates.ts      # Resume templates
+│   └── utils.ts          # Utility functions
+├── pages/
+│   ├── LandingPage.tsx   # Homepage
+│   ├── DashboardPage.tsx # Document management
+│   ├── BuilderPage.tsx   # Resume editor
+│   └── CoverLetterPage.tsx # Cover letter editor
+├── store/
+│   ├── resumeStore.ts    # Resume state
+│   ├── coverLetterStore.ts # Cover letter state
+│   └── appStore.ts       # App-wide state
+└── types/
+    └── resume.ts         # TypeScript interfaces
+```
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## 🎨 Features Breakdown
 
-## Can I connect a custom domain to my Lovable project?
+### Resume Builder Steps
+1. **Personal Info** - Name, contact details, links
+2. **Summary** - Professional summary/objective
+3. **Skills** - Technical and soft skills
+4. **Experience** - Work history with achievements
+5. **Education** - Academic background
+6. **Projects** - Portfolio projects
 
-Yes, you can!
+### ATS Scoring Rules
+- ✅ Contact information completeness
+- ✅ Professional summary presence
+- ✅ Skills section with keywords
+- ✅ Work experience with achievements
+- ✅ Education details
+- ✅ Action verb usage
+- ✅ Quantifiable results
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 📦 Deployment
+
+### Vercel (Recommended)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/resumeats)
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+### Netlify
+
+```bash
+# Build for production
+npm run build
+
+# Deploy dist folder to Netlify
+```
+
+### Docker
+
+```dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+No environment variables required - the app runs entirely client-side.
+
+### Build Commands
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
+- [Lucide Icons](https://lucide.dev/) - Icon library
+- [@react-pdf/renderer](https://react-pdf.org/) - PDF generation
+- [Dexie.js](https://dexie.org/) - IndexedDB wrapper
+
+---
+
+<div align="center">
+
+**Made with ❤️ for job seekers everywhere**
+
+[⬆ Back to top](#resumeats---free-ats-optimized-resume--cover-letter-builder)
+
+</div>

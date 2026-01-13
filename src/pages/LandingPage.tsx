@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { FileText, Sparkles, Shield, Zap, CheckCircle2, ArrowRight } from 'lucide-react';
+import { FileText, Sparkles, Shield, Zap, CheckCircle2, ArrowRight, Mail, Download, Database } from 'lucide-react';
 
 const features = [
   {
@@ -24,39 +24,15 @@ const features = [
     title: 'Export to PDF',
     description: 'Download print-ready PDFs in A4 or US Letter format instantly.',
   },
-];
-
-const pricingPlans = [
   {
-    name: 'Free',
-    price: '$0',
-    period: 'forever',
-    description: 'Perfect for getting started',
-    features: [
-      '3 Resume Templates',
-      'Basic ATS Score',
-      'PDF Export with Watermark',
-      'Local Storage',
-      '1 Cover Letter Template',
-    ],
-    cta: 'Start Free',
-    highlighted: false,
+    icon: Mail,
+    title: 'Cover Letters',
+    description: 'Create matching cover letters with multiple tone options and templates.',
   },
   {
-    name: 'Pro',
-    price: '$19',
-    period: 'lifetime',
-    description: 'Everything you need to land your dream job',
-    features: [
-      '50+ Premium Templates',
-      'Advanced ATS Analysis',
-      'PDF Export without Watermark',
-      'Cover Letter Builder',
-      'Priority Support',
-      'All Future Updates',
-    ],
-    cta: 'Get Pro Access',
-    highlighted: true,
+    icon: Database,
+    title: 'Local Storage',
+    description: 'Your data stays on your device. No account needed, 100% private.',
   },
 ];
 
@@ -80,8 +56,8 @@ export default function LandingPage() {
               <a href="#templates" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Templates
               </a>
-              <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
+              <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                How It Works
               </a>
             </nav>
             <div className="flex items-center gap-3">
@@ -107,7 +83,7 @@ export default function LandingPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5 text-sm text-accent mb-6">
                 <Sparkles className="h-4 w-4" />
-                <span>Trusted by 50,000+ job seekers</span>
+                <span>100% Free • No Signup Required</span>
               </div>
             </motion.div>
             
@@ -131,7 +107,7 @@ export default function LandingPage() {
               className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
             >
               Build a professional resume that passes ATS systems and impresses recruiters. 
-              No signup required. Your data stays on your device.
+              Completely free. No watermarks. Your data stays on your device.
             </motion.p>
             
             <motion.div
@@ -142,13 +118,13 @@ export default function LandingPage() {
             >
               <Link to="/builder">
                 <Button variant="hero" size="xl" className="w-full sm:w-auto">
-                  Start Free
+                  Create Resume
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/dashboard">
+              <Link to="/cover-letter/new">
                 <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
-                  View Dashboard
+                  Create Cover Letter
                 </Button>
               </Link>
             </motion.div>
@@ -157,11 +133,15 @@ export default function LandingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex items-center justify-center gap-6 mt-10 text-sm text-muted-foreground"
+              className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10 text-sm text-muted-foreground"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-score-excellent" />
                 <span>No signup</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-score-excellent" />
+                <span>No watermarks</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-score-excellent" />
@@ -188,7 +168,7 @@ export default function LandingPage() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -214,10 +194,10 @@ export default function LandingPage() {
         <div className="container-wide section-padding">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              50+ ATS-Friendly Templates
+              17+ ATS-Friendly Templates
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Clean, minimal templates designed to pass any Applicant Tracking System.
+              Clean, minimal templates designed to pass any Applicant Tracking System. All free!
             </p>
           </div>
           
@@ -266,64 +246,37 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 md:py-32">
+      {/* How It Works */}
+      <section id="how-it-works" className="py-20 md:py-32">
         <div className="container-wide section-padding">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Simple, Transparent Pricing
+              Create Your Resume in 3 Steps
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Start free and upgrade when you're ready. No hidden fees.
+              Our guided wizard makes it easy to build a professional resume.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {pricingPlans.map((plan, index) => (
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              { step: '1', title: 'Fill in Your Details', description: 'Enter your personal info, experience, education, and skills in our easy-to-use form.' },
+              { step: '2', title: 'Get ATS Score', description: 'See your real-time ATS score and get smart suggestions to improve your resume.' },
+              { step: '3', title: 'Download PDF', description: 'Export your professional, ATS-optimized resume as a PDF. No watermarks!' },
+            ].map((item, index) => (
               <motion.div
-                key={plan.name}
+                key={item.step}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
                 viewport={{ once: true }}
-                className={`relative p-8 rounded-2xl border ${
-                  plan.highlighted 
-                    ? 'border-accent bg-accent/5 shadow-elevated' 
-                    : 'border-border bg-card'
-                }`}
+                className="text-center"
               >
-                {plan.highlighted && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full gradient-bg text-xs text-primary-foreground font-medium">
-                    Most Popular
-                  </div>
-                )}
-                
-                <h3 className="font-display text-xl font-semibold mb-2">{plan.name}</h3>
-                <p className="text-muted-foreground text-sm mb-4">{plan.description}</p>
-                
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="font-display text-4xl font-bold">{plan.price}</span>
-                  <span className="text-muted-foreground">/{plan.period}</span>
+                <div className="h-16 w-16 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-primary-foreground">
+                  {item.step}
                 </div>
-                
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-3 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-score-excellent flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Link to={plan.highlighted ? '/pricing' : '/builder'}>
-                  <Button 
-                    variant={plan.highlighted ? 'hero' : 'outline'} 
-                    className="w-full"
-                    size="lg"
-                  >
-                    {plan.cta}
-                  </Button>
-                </Link>
+                <h3 className="font-display text-xl font-semibold mb-3">{item.title}</h3>
+                <p className="text-muted-foreground">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -337,14 +290,22 @@ export default function LandingPage() {
             Ready to Land Your Dream Job?
           </h2>
           <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-            Join thousands of job seekers who've successfully used our resume builder.
+            Join thousands of job seekers who've successfully used our free resume builder.
           </p>
-          <Link to="/builder">
-            <Button variant="secondary" size="xl">
-              Create Your Resume Now
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/builder">
+              <Button variant="secondary" size="xl">
+                <FileText className="h-5 w-5 mr-2" />
+                Create Resume
+              </Button>
+            </Link>
+            <Link to="/cover-letter/new">
+              <Button variant="outline" size="xl" className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                <Mail className="h-5 w-5 mr-2" />
+                Create Cover Letter
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -358,8 +319,10 @@ export default function LandingPage() {
               </div>
               <span className="font-display text-xl font-bold">ResumeATS</span>
             </div>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <span>© 2024 ResumeATS. All rights reserved.</span>
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-sm text-muted-foreground">
+              <span>Free ATS Resume & Cover Letter Builder</span>
+              <span className="hidden md:inline">•</span>
+              <span>© {new Date().getFullYear()} ResumeATS. All rights reserved.</span>
             </div>
           </div>
         </div>

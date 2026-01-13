@@ -65,7 +65,7 @@ Warm regards,
     id: 'formal-1',
     name: 'Formal Executive',
     tone: 'formal',
-    isPro: true,
+    isPro: false,
     content: `Dear {{hiringManager}},
 
 I respectfully submit my application for the position of {{jobTitle}} at {{companyName}}. Having carefully reviewed the requirements of this role, I am confident that my qualifications and experience align precisely with your organization's needs.
@@ -81,7 +81,7 @@ Respectfully yours,
     id: 'professional-2',
     name: 'Impact-Focused',
     tone: 'professional',
-    isPro: true,
+    isPro: false,
     content: `Dear {{hiringManager}},
 
 The {{jobTitle}} position at {{companyName}} immediately caught my attention. My background demonstrates a consistent pattern of driving measurable results, and I am eager to bring this same impact to your team.
@@ -97,7 +97,7 @@ Best regards,
     id: 'confident-2',
     name: 'Bold Innovator',
     tone: 'confident',
-    isPro: true,
+    isPro: false,
     content: `Dear {{hiringManager}},
 
 Innovation drives me, and that's exactly why the {{jobTitle}} position at {{companyName}} excites me. I bring a unique combination of skills that will directly impact your team's success.
