@@ -63,6 +63,10 @@ export default function DashboardPage() {
     navigate(`/builder/${newResume.id}`);
   };
 
+  const handleCreateCoverLetter = () => {
+    navigate('/cover-letter/new');
+  };
+
   const handleDeleteResume = async (id: string) => {
     await deleteResume(id);
     setResumes(resumes.filter(r => r.id !== id));
@@ -190,15 +194,31 @@ export default function DashboardPage() {
                 title="No cover letters yet"
                 description="Create a personalized cover letter to accompany your resume."
                 actionLabel="Create Cover Letter"
-                onAction={() => navigate('/cover-letter/new')}
+                onAction={handleCreateCoverLetter}
+                icon={Mail}
               />
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {/* Create New Card */}
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  onClick={handleCreateCoverLetter}
+                  className="group h-48 rounded-xl border-2 border-dashed border-border hover:border-accent bg-surface-2 hover:bg-accent/5 flex flex-col items-center justify-center gap-3 transition-all duration-200"
+                >
+                  <div className="h-12 w-12 rounded-xl bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                    <Plus className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <span className="font-medium text-muted-foreground group-hover:text-purple-600 transition-colors">
+                    Create Cover Letter
+                  </span>
+                </motion.button>
+
                 {filteredCoverLetters.map((letter, index) => (
                   <CoverLetterCard
                     key={letter.id}
                     letter={letter}
-                    index={index}
+                    index={index + 1}
                     onDelete={() => handleDeleteCoverLetter(letter.id)}
                   />
                 ))}
@@ -357,13 +377,14 @@ interface EmptyStateProps {
   description: string;
   actionLabel: string;
   onAction: () => void;
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
-function EmptyState({ title, description, actionLabel, onAction }: EmptyStateProps) {
+function EmptyState({ title, description, actionLabel, onAction, icon: Icon = FileText }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <div className="h-16 w-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6">
-        <FileText className="h-8 w-8 text-accent" />
+        <Icon className="h-8 w-8 text-accent" />
       </div>
       <h3 className="font-display text-xl font-semibold mb-2">{title}</h3>
       <p className="text-muted-foreground mb-6 max-w-md">{description}</p>
