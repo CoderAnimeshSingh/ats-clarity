@@ -93,11 +93,8 @@ export default function CoverLetterPage() {
     setIsDirty(true);
   };
 
-  const handleSelectTemplate = (templateId: string, isPremium: boolean) => {
-    if (isPremium && !isPro) {
-      setShowUpgrade(true);
-      return;
-    }
+  const handleSelectTemplate = (templateId: string) => {
+    // All templates are free now
     applyTemplate(templateId);
     setIsDirty(true);
     setActiveStep('content');
@@ -302,7 +299,7 @@ export default function CoverLetterPage() {
                           return (
                             <button
                               key={template.id}
-                              onClick={() => handleSelectTemplate(template.id, template.isPro)}
+                              onClick={() => handleSelectTemplate(template.id)}
                               className={cn(
                                 "relative p-4 rounded-xl border-2 text-left transition-all duration-200",
                                 isSelected

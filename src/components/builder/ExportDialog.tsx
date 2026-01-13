@@ -10,9 +10,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Download, Loader2, FileText, Crown, Sparkles } from 'lucide-react';
+import { Download, Loader2, FileText, CheckCircle2 } from 'lucide-react';
 import { ResumePDFDocument } from './ResumePDFDocument';
-import { useAppStore } from '@/store/appStore';
 import type { Resume } from '@/types/resume';
 import { cn } from '@/lib/utils';
 
@@ -23,17 +22,15 @@ interface ExportDialogProps {
 }
 
 export function ExportDialog({ open, onOpenChange, resume }: ExportDialogProps) {
-  const { isPro } = useAppStore();
   const [pageSize, setPageSize] = useState<'A4' | 'LETTER'>('A4');
   const [isExporting, setIsExporting] = useState(false);
-
-  const showWatermark = !isPro;
 
   const handleExport = async () => {
     setIsExporting(true);
     
     try {
-      const doc = <ResumePDFDocument resume={resume} pageSize={pageSize} showWatermark={showWatermark} />;
+      // No watermark - everything is free
+      const doc = <ResumePDFDocument resume={resume} pageSize={pageSize} showWatermark={false} />;
       const blob = await pdf(doc).toBlob();
       
       // Create download link
@@ -63,7 +60,7 @@ export function ExportDialog({ open, onOpenChange, resume }: ExportDialogProps) 
             Export Resume
           </DialogTitle>
           <DialogDescription>
-            Download your resume as a print-ready PDF
+            Download your ATS-optimized resume as a print-ready PDF
           </DialogDescription>
         </DialogHeader>
 
@@ -112,45 +109,18 @@ export function ExportDialog({ open, onOpenChange, resume }: ExportDialogProps) 
             </RadioGroup>
           </div>
 
-          {/* Watermark Notice */}
-          {showWatermark && (
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-              <div className="flex items-start gap-3">
-                <Crown className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-medium text-sm text-amber-900">
-                    Free Version Watermark
-                  </p>
-                  <p className="text-xs text-amber-700 mt-1">
-                    Your PDF will include a "DRAFT" watermark. Upgrade to Pro for clean, professional exports.
-                  </p>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-3 h-8 text-xs border-amber-300 text-amber-900 hover:bg-amber-100"
-                  >
-                    <Sparkles className="h-3 w-3 mr-1" />
-                    Upgrade to Pro
-                  </Button>
-                </div>
+          {/* Free Export Badge */}
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              </div>
+              <div>
+                <p className="font-medium text-sm text-emerald-900">Free Download</p>
+                <p className="text-xs text-emerald-700">No watermark • Unlimited exports • ATS-optimized</p>
               </div>
             </div>
-          )}
-
-          {/* Pro Badge */}
-          {!showWatermark && (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <Crown className="h-4 w-4 text-emerald-600" />
-                </div>
-                <div>
-                  <p className="font-medium text-sm text-emerald-900">Pro Member</p>
-                  <p className="text-xs text-emerald-700">No watermark • Unlimited exports</p>
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Actions */}
