@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
 });
 
 export function ResumePDFDocument({ resume, pageSize, showWatermark }: ResumePDFDocumentProps) {
-  const { personalInfo, summary, skills, experience, education, projects } = resume;
+  const { personalInfo, summary, skills, experience, education, projects, certifications, achievements } = resume;
 
   const ContactInfo = () => {
     const items = [
@@ -325,6 +325,45 @@ export function ResumePDFDocument({ resume, pageSize, showWatermark }: ResumePDF
                       </View>
                     ))}
                   </View>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Certifications */}
+        {certifications.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Certifications</Text>
+            {certifications.map((cert) => (
+              <View key={cert.id} style={styles.entryContainer}>
+                <View style={styles.entryHeader}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.entryTitle}>{cert.name}</Text>
+                    <Text style={styles.entrySubtitle}>{cert.issuer}</Text>
+                  </View>
+                  <Text style={styles.entryDate}>{cert.date}</Text>
+                </View>
+                {cert.credentialId && (
+                  <Text style={styles.projectTech}>Credential ID: {cert.credentialId}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Achievements */}
+        {achievements.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Awards & Achievements</Text>
+            {achievements.map((ach) => (
+              <View key={ach.id} style={styles.entryContainer}>
+                <View style={styles.entryHeader}>
+                  <Text style={styles.entryTitle}>{ach.title}</Text>
+                  {ach.date && <Text style={styles.entryDate}>{ach.date}</Text>}
+                </View>
+                {ach.description && (
+                  <Text style={styles.entryDescription}>{ach.description}</Text>
                 )}
               </View>
             ))}
