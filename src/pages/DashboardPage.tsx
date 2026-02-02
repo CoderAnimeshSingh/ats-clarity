@@ -37,6 +37,7 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [showImport, setShowImport] = useState(false);
+  const [activeTab, setActiveTab] = useState('resumes');
   const navigate = useNavigate();
   const { setCurrentResume } = useResumeStore();
 
@@ -149,7 +150,7 @@ export default function DashboardPage() {
           />
         </div>
 
-        <Tabs defaultValue="resumes" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList>
             <TabsTrigger value="resumes" className="gap-2">
               <FileText className="h-4 w-4" />
@@ -208,13 +209,19 @@ export default function DashboardPage() {
 
           <TabsContent value="cover-letters" className="space-y-4">
             {filteredCoverLetters.length === 0 ? (
-              <EmptyState
-                title="No cover letters yet"
-                description="Create a personalized cover letter to accompany your resume."
-                actionLabel="Create Cover Letter"
-                onAction={handleCreateCoverLetter}
-                icon={Mail}
-              />
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="h-16 w-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6">
+                  <Mail className="h-8 w-8 text-accent" />
+                </div>
+                <h3 className="font-display text-xl font-semibold mb-2">No cover letters yet</h3>
+                <p className="text-muted-foreground mb-6 max-w-md">Create a personalized cover letter to accompany your resume.</p>
+                <Button variant="hero" asChild>
+                  <Link to="/cover-letter/new">
+                    <Plus className="h-4 w-4" />
+                    Create Cover Letter
+                  </Link>
+                </Button>
+              </div>
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {/* Create New Card */}
@@ -416,7 +423,7 @@ function EmptyState({ title, description, actionLabel, onAction, icon: Icon = Fi
       </div>
       <h3 className="font-display text-xl font-semibold mb-2">{title}</h3>
       <p className="text-muted-foreground mb-6 max-w-md">{description}</p>
-      <Button variant="hero" onClick={onAction}>
+      <Button variant="hero" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAction(); }}>
         <Plus className="h-4 w-4" />
         {actionLabel}
       </Button>
