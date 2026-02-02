@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -263,83 +263,86 @@ interface ResumeCardProps {
   onDuplicate: () => void;
 }
 
-function ResumeCard({ resume, index, onDelete, onDuplicate }: ResumeCardProps) {
-  const navigate = useNavigate();
-  const { setCurrentResume } = useResumeStore();
-  const analysis = analyzeResume(resume);
-  
-  const handleEdit = () => {
-    setCurrentResume(resume);
-    navigate(`/builder/${resume.id}`);
-  };
+const ResumeCard = React.forwardRef<HTMLDivElement, ResumeCardProps>(
+  function ResumeCard({ resume, index, onDelete, onDuplicate }, ref) {
+    const navigate = useNavigate();
+    const { setCurrentResume } = useResumeStore();
+    const analysis = analyzeResume(resume);
+    
+    const handleEdit = () => {
+      setCurrentResume(resume);
+      navigate(`/builder/${resume.id}`);
+    };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'bg-score-excellent';
-    if (score >= 60) return 'bg-score-good';
-    return 'bg-score-poor';
-  };
+    const getScoreColor = (score: number) => {
+      if (score >= 80) return 'bg-score-excellent';
+      if (score >= 60) return 'bg-score-good';
+      return 'bg-score-poor';
+    };
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="group relative rounded-xl border border-border bg-card p-5 hover:shadow-elevated hover:border-accent/50 transition-all duration-200 cursor-pointer"
-      onClick={handleEdit}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center">
-            <FileText className="h-5 w-5 text-accent" />
+    return (
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.05 }}
+        className="group relative rounded-xl border border-border bg-card p-5 hover:shadow-elevated hover:border-accent/50 transition-all duration-200 cursor-pointer"
+        onClick={handleEdit}
+      >
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center">
+              <FileText className="h-5 w-5 text-accent" />
+            </div>
+            <div>
+              <h3 className="font-semibold line-clamp-1">{resume.name}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-1">
+                {resume.personalInfo.fullName || 'No name added'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold line-clamp-1">{resume.name}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-1">
-              {resume.personalInfo.fullName || 'No name added'}
-            </p>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleEdit(); }}>
+                <ChevronRight className="h-4 w-4 mr-2" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDuplicate(); }}>
+                <Copy className="h-4 w-4 mr-2" />
+                Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Clock className="h-3.5 w-3.5" />
+            <span>{formatDistanceToNow(new Date(resume.updatedAt), { addSuffix: true })}</span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <div className={`h-2 w-2 rounded-full ${getScoreColor(analysis.overallScore)}`} />
+            <span className="text-sm font-medium">{analysis.overallScore}%</span>
           </div>
         </div>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleEdit(); }}>
-              <ChevronRight className="h-4 w-4 mr-2" />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDuplicate(); }}>
-              <Copy className="h-4 w-4 mr-2" />
-              Duplicate
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={(e) => { e.stopPropagation(); onDelete(); }}
-              className="text-destructive focus:text-destructive"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-3.5 w-3.5" />
-          <span>{formatDistanceToNow(new Date(resume.updatedAt), { addSuffix: true })}</span>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <div className={`h-2 w-2 rounded-full ${getScoreColor(analysis.overallScore)}`} />
-          <span className="text-sm font-medium">{analysis.overallScore}%</span>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+      </motion.div>
+    );
+  }
+);
 
 interface CoverLetterCardProps {
   letter: CoverLetter;
