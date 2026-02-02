@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -60,10 +60,19 @@ export default function CoverLetterPage() {
   const [activeStep, setActiveStep] = useState<'details' | 'template' | 'content'>('details');
   const [showPreview, setShowPreview] = useState(false);
 
+  // Prevent duplicate initialization in React StrictMode / re-renders
+  const lastLoadedIdRef = useRef<string | undefined>(undefined);
+
   // Load cover letter
   useEffect(() => {
     const loadCoverLetter = async () => {
-      if (id && id !== 'new') {
+      if (!id) return;
+
+      // Avoid re-running for the same route param value
+      if (lastLoadedIdRef.current === id) return;
+      lastLoadedIdRef.current = id;
+
+      if (id !== 'new') {
         const letter = await getCoverLetter(id);
         if (letter) {
           setCurrentCoverLetter(letter);
@@ -73,6 +82,11 @@ export default function CoverLetterPage() {
       } else {
         const newLetter = createNewCoverLetter();
         setCurrentCoverLetter(newLetter);
+
+        // Persist immediately so that the /cover-letter/:id loader can find it.
+        // Without this, we would redirect to /cover-letter/:id and then bounce back
+        // to /dashboard because getCoverLetter(newId) returns undefined.
+        await saveCoverLetter(newLetter);
         navigate(`/cover-letter/${newLetter.id}`, { replace: true });
       }
     };
