@@ -10,10 +10,11 @@ import {
   Eye,
   Settings,
   Check,
-  Layers
+  Layers,
+  History
 } from 'lucide-react';
 import { useResumeStore, createNewResume } from '@/store/resumeStore';
-import { getResume, saveResume } from '@/lib/db';
+import { getResume, saveResume, saveResumeVersion } from '@/lib/db';
 import { analyzeResume } from '@/lib/atsEngine';
 import { PersonalInfoStep } from '@/components/builder/PersonalInfoStep';
 import { SummaryStep } from '@/components/builder/SummaryStep';
@@ -21,11 +22,14 @@ import { SkillsStep } from '@/components/builder/SkillsStep';
 import { ExperienceStep } from '@/components/builder/ExperienceStep';
 import { EducationStep } from '@/components/builder/EducationStep';
 import { ProjectsStep } from '@/components/builder/ProjectsStep';
+import { CertificationsStep } from '@/components/builder/CertificationsStep';
+import { AchievementsStep } from '@/components/builder/AchievementsStep';
 import { ResumePreview } from '@/components/builder/ResumePreview';
 import { ATSScoreCard } from '@/components/builder/ATSScoreCard';
 import { TemplateSelector } from '@/components/builder/TemplateSelector';
 import { ExportDialog } from '@/components/builder/ExportDialog';
 import { SectionManager } from '@/components/builder/SectionManager';
+import { VersionHistory } from '@/components/builder/VersionHistory';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 
@@ -34,8 +38,10 @@ const steps = [
   { id: 'summary', title: 'Summary', component: SummaryStep },
   { id: 'skills', title: 'Skills', component: SkillsStep },
   { id: 'experience', title: 'Experience', component: ExperienceStep },
-  { id: 'education', title: 'Education', component: EducationStep },
   { id: 'projects', title: 'Projects', component: ProjectsStep },
+  { id: 'education', title: 'Education', component: EducationStep },
+  { id: 'certifications', title: 'Certs', component: CertificationsStep },
+  { id: 'achievements', title: 'Awards', component: AchievementsStep },
 ];
 
 export default function BuilderPage() {
@@ -46,7 +52,9 @@ export default function BuilderPage() {
   const [showTemplates, setShowTemplates] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showSectionManager, setShowSectionManager] = useState(false);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [lastVersionStep, setLastVersionStep] = useState<number | null>(null);
 
   // Load resume
   useEffect(() => {
@@ -67,18 +75,25 @@ export default function BuilderPage() {
     loadResume();
   }, [id, setCurrentResume, navigate]);
 
-  // Auto-save
+  // Auto-save with version snapshots on step changes
   useEffect(() => {
     if (!currentResume || !isDirty) return;
 
     const saveTimeout = setTimeout(async () => {
       setIsSaving(true);
       await saveResume(currentResume);
+      
+      // Save version snapshot when moving to a new step (max once per step)
+      if (lastVersionStep !== null && lastVersionStep !== currentStep) {
+        await saveResumeVersion(currentResume);
+      }
+      setLastVersionStep(currentStep);
+      
       setIsSaving(false);
     }, 1000);
 
     return () => clearTimeout(saveTimeout);
-  }, [currentResume, isDirty]);
+  }, [currentResume, isDirty, currentStep, lastVersionStep]);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -153,6 +168,15 @@ export default function BuilderPage() {
             >
               <Layers className="h-4 w-4" />
               <span className="hidden sm:inline ml-2">Sections</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setShowVersionHistory(true)}
+            >
+              <History className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">History</span>
             </Button>
             
             <Button 
@@ -298,6 +322,13 @@ export default function BuilderPage() {
       <SectionManager
         open={showSectionManager}
         onOpenChange={setShowSectionManager}
+      />
+
+      {/* Version History */}
+      <VersionHistory
+        open={showVersionHistory}
+        onOpenChange={setShowVersionHistory}
+        resumeId={currentResume.id}
       />
     </div>
   );
