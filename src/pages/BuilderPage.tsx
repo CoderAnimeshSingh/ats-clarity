@@ -9,7 +9,8 @@ import {
   Download,
   Eye,
   Settings,
-  Check
+  Check,
+  Layers
 } from 'lucide-react';
 import { useResumeStore, createNewResume } from '@/store/resumeStore';
 import { getResume, saveResume } from '@/lib/db';
@@ -24,6 +25,8 @@ import { ResumePreview } from '@/components/builder/ResumePreview';
 import { ATSScoreCard } from '@/components/builder/ATSScoreCard';
 import { TemplateSelector } from '@/components/builder/TemplateSelector';
 import { ExportDialog } from '@/components/builder/ExportDialog';
+import { SectionManager } from '@/components/builder/SectionManager';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 
 const steps = [
@@ -42,6 +45,7 @@ export default function BuilderPage() {
   const [showPreview, setShowPreview] = useState(true);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showExport, setShowExport] = useState(false);
+  const [showSectionManager, setShowSectionManager] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   // Load resume
@@ -139,6 +143,17 @@ export default function BuilderPage() {
               )} />
               <span className="text-sm font-medium">{analysis.overallScore}% ATS Score</span>
             </div>
+            
+            <ThemeToggle />
+            
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setShowSectionManager(true)}
+            >
+              <Layers className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">Sections</span>
+            </Button>
             
             <Button 
               variant="ghost" 
@@ -277,6 +292,12 @@ export default function BuilderPage() {
         open={showExport}
         onOpenChange={setShowExport}
         resume={currentResume}
+      />
+
+      {/* Section Manager */}
+      <SectionManager
+        open={showSectionManager}
+        onOpenChange={setShowSectionManager}
       />
     </div>
   );
