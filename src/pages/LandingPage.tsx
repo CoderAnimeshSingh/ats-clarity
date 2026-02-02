@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { FileText, Sparkles, Shield, Zap, CheckCircle2, ArrowRight, Mail, Download, Database } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const features = [
   {
@@ -61,6 +62,7 @@ export default function LandingPage() {
               </a>
             </nav>
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               <Link to="/dashboard">
                 <Button variant="ghost" size="sm">Dashboard</Button>
               </Link>

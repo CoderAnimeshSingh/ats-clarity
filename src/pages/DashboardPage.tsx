@@ -11,7 +11,8 @@ import {
   MoreVertical,
   Mail,
   ChevronRight,
-  Search
+  Search,
+  Upload
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -27,14 +28,18 @@ import { saveResume } from '@/lib/db';
 import type { Resume, CoverLetter } from '@/types/resume';
 import { analyzeResume } from '@/lib/atsEngine';
 import { formatDistanceToNow } from 'date-fns';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { ResumeImport } from '@/components/ResumeImport';
 
 export default function DashboardPage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [coverLetters, setCoverLetters] = useState<CoverLetter[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [showImport, setShowImport] = useState(false);
   const navigate = useNavigate();
   const { setCurrentResume } = useResumeStore();
+
 
   useEffect(() => {
     loadData();
@@ -83,6 +88,12 @@ export default function DashboardPage() {
     setCoverLetters(coverLetters.filter(c => c.id !== id));
   };
 
+  const handleImportResume = async (resume: Resume) => {
+    await saveResume(resume);
+    setCurrentResume(resume);
+    navigate(`/builder/${resume.id}`);
+  };
+
   const filteredResumes = resumes.filter(r => 
     r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.personalInfo.fullName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -105,10 +116,17 @@ export default function DashboardPage() {
               </div>
               <span className="font-display text-xl font-bold">ResumeATS</span>
             </Link>
-            <Button variant="hero" onClick={handleCreateResume}>
-              <Plus className="h-4 w-4" />
-              New Resume
-            </Button>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button variant="outline" onClick={() => setShowImport(true)}>
+                <Upload className="h-4 w-4" />
+                <span className="hidden sm:inline ml-2">Import</span>
+              </Button>
+              <Button variant="hero" onClick={handleCreateResume}>
+                <Plus className="h-4 w-4" />
+                <span className="hidden sm:inline ml-2">New Resume</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -206,10 +224,10 @@ export default function DashboardPage() {
                   onClick={handleCreateCoverLetter}
                   className="group h-48 rounded-xl border-2 border-dashed border-border hover:border-accent bg-surface-2 hover:bg-accent/5 flex flex-col items-center justify-center gap-3 transition-all duration-200"
                 >
-                  <div className="h-12 w-12 rounded-xl bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                    <Plus className="h-6 w-6 text-purple-600" />
+                  <div className="h-12 w-12 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                    <Plus className="h-6 w-6 text-accent" />
                   </div>
-                  <span className="font-medium text-muted-foreground group-hover:text-purple-600 transition-colors">
+                  <span className="font-medium text-muted-foreground group-hover:text-accent transition-colors">
                     Create Cover Letter
                   </span>
                 </motion.button>
@@ -226,6 +244,13 @@ export default function DashboardPage() {
             )}
           </TabsContent>
         </Tabs>
+
+        {/* Resume Import Dialog */}
+        <ResumeImport
+          open={showImport}
+          onOpenChange={setShowImport}
+          onImport={handleImportResume}
+        />
       </main>
     </div>
   );
@@ -335,8 +360,8 @@ function CoverLetterCard({ letter, index, onDelete }: CoverLetterCardProps) {
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-purple-100 flex items-center justify-center">
-            <Mail className="h-5 w-5 text-purple-600" />
+          <div className="h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center">
+            <Mail className="h-5 w-5 text-accent" />
           </div>
           <div>
             <h3 className="font-semibold line-clamp-1">{letter.name}</h3>
